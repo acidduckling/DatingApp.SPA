@@ -33,3 +33,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - Angular JWT: https://github.com/auth0/angular2-jwt
 - Angular Bootstrap: https://valor-software.com/ngx-bootstrap
 - Custom Bootstrap theme: https://bootswatch.com/
+- Random User Photos: https://randomuser.me/
+- Photo Gallery: https://www.npmjs.com/package/ngx-gallery
