@@ -35,3 +35,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - Custom Bootstrap theme: https://bootswatch.com/
 - Random User Photos: https://randomuser.me/
 - Photo Gallery: https://www.npmjs.com/package/ngx-gallery
+- File Upload: https://github.com/valor-software/ng2-file-upload
