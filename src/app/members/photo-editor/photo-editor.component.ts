@@ -83,7 +83,7 @@ export class PhotoEditorComponent implements OnInit {
           this.authService.changeMemberPhoto(photo.url);
           this.authService.currentUser.photoUrl = photo.url;
           localStorage.setItem(
-            "user",
+            'user',
             JSON.stringify(this.authService.currentUser)
           );
         },
@@ -96,14 +96,14 @@ export class PhotoEditorComponent implements OnInit {
   deletePhoto(id: number) {
     this.alertify.confirm("Are you sure you want to delete this photo?", () => {
       this.userService
-        .deletePhoto(this.authService.currentUser.id, id)
+        .deletePhoto(this.authService.decodedToken.nameid, id)
         .subscribe(
           () => {
             _.remove(this.photos, { id: id });
-            this.alertify.success("Photo has been deleted");
+            this.alertify.success('Photo has been deleted');
           },
           error => {
-            this.alertify.error("Failed to delete photo");
+            this.alertify.error('Failed to delete photo');
           }
         );
     });

@@ -3,7 +3,7 @@
 }
 
 img {
-    height: 50px;
+    max-height: 50px;
     border: 2px solid white;
     display: inline-block;
 }

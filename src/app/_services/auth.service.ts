@@ -32,10 +32,9 @@ export class AuthService {
                 localStorage.setItem('user', JSON.stringify(user.user));
                 this.decodedToken = this.jwtHelper.decodeToken(user.tokenString);
                 this.currentUser = user.user;
-                console.log(this.decodedToken);
                 
                 this.userToken = user.tokenString;
-                if(this.currentUser.photoUrl != null)
+                if(this.currentUser.photoUrl !== null)
                     this.changeMemberPhoto(this.currentUser.photoUrl);
                 else
                     this.changeMemberPhoto('../../assets/user.png');
