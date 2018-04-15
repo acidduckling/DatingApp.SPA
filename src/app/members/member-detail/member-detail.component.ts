@@ -12,13 +12,13 @@ import { TabsetComponent } from 'ngx-bootstrap';
   styleUrls: ['./member-detail.component.css']
 })
 export class MemberDetailComponent implements OnInit {
-  @ViewChild('memberTabs') memberTabs: TabsetComponent; 
+  @ViewChild('memberTabs') memberTabs: TabsetComponent;
   user: User;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
 
-  constructor(private userService: UserService, 
-    private alertify: AlertifyService, 
+  constructor(private userService: UserService,
+    private alertify: AlertifyService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -27,7 +27,8 @@ export class MemberDetailComponent implements OnInit {
     });
 
     this.route.queryParams.subscribe(params => {
-      this.memberTabs.tabs[params['tab']].active = true;
+      const selectedTab = params['tab'];
+      this.memberTabs.tabs[selectedTab > 0 ? selectedTab : 0].active = true;
     })
 
     this.galleryOptions = [
@@ -56,7 +57,7 @@ export class MemberDetailComponent implements OnInit {
     });
     return imageUrls;
   }
-  
+
   selectTab(tabId: number) {
     this.memberTabs.tabs[tabId].active = true;
   }

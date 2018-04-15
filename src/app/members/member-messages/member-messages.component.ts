@@ -1,15 +1,15 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from '@angular/core';
 import 'rxjs/add/operator/do';
-import { Message } from "../../_models/message";
-import { AlertifyService } from "../../_services/alertify.service";
-import { AuthService } from "../../_services/auth.service";
-import { UserService } from "../../_services/user.service";
-import _ = require("lodash");
+import { Message } from '../../_models/message';
+import { AlertifyService } from '../../_services/alertify.service';
+import { AuthService } from '../../_services/auth.service';
+import { UserService } from '../../_services/user.service';
+import _ = require('lodash');
 
 @Component({
-  selector: "app-member-messages",
-  templateUrl: "./member-messages.component.html",
-  styleUrls: ["./member-messages.component.css"]
+  selector: 'app-member-messages',
+  templateUrl: './member-messages.component.html',
+  styleUrls: ['./member-messages.component.css']
 })
 export class MemberMessagesComponent implements OnInit {
   @Input() userId: number;

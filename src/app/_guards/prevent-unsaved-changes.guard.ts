@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { CanDeactivate } from "@angular/router";
-import { MemberEditComponent } from "../members/member-edit/member-edit.component";
-import { Observable } from "rxjs/Observable";
+import { Injectable } from '@angular/core';
+import { CanDeactivate } from '@angular/router';
+import { MemberEditComponent } from '../members/member-edit/member-edit.component';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class PreventUnsavedChanges implements CanDeactivate<MemberEditComponent> {

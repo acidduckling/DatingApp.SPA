@@ -1,76 +1,61 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import { BehaviorSubject } from 'rxjs';
-import { User } from '../_models/User';
+import { Observable } from 'rxjs/Observable';
+import { User } from '../_models/user';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthUser } from '../_models/authUser';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable()
 export class AuthService {
-    baseUrl = 'http://localhost:5000/api/auth/';
-    userToken: any;
-    decodedToken: any;
-    currentUser: User;
-    jwtHelper: JwtHelper = new JwtHelper();
-    private photoUrl = new BehaviorSubject<string>('../../assets/user.png');
-    currentPhotoUrl = this.photoUrl.asObservable();
+  baseUrl = environment.apiUrl;
+  userToken: any;
+  decodedToken: any;
+  currentUser: User;
+  private photoUrl = new BehaviorSubject<string>('../../assets/user.png');
+  currentPhotoUrl = this.photoUrl.asObservable();
 
-    constructor(private http:Http) { }
+  constructor(private http: HttpClient, private jwtHelperService: JwtHelperService) {}
 
-    changeMemberPhoto(photoUrl: string) {
-        this.photoUrl.next(photoUrl);
-    }
+  changeMemberPhoto(photoUrl: string) {
+    this.photoUrl.next(photoUrl);
+  }
 
-    login(model: any) {
-        return this.http.post(this.baseUrl + 'login', model, this.requestOptions()).map((response: Response) => {
-            const user = response.json();
-            if(user) {
-                localStorage.setItem('token', user.tokenString);
-                localStorage.setItem('user', JSON.stringify(user.user));
-                this.decodedToken = this.jwtHelper.decodeToken(user.tokenString);
-                this.currentUser = user.user;
-                
-                this.userToken = user.tokenString;
-                if(this.currentUser.photoUrl !== null)
-                    this.changeMemberPhoto(this.currentUser.photoUrl);
-                else
-                    this.changeMemberPhoto('../../assets/user.png');
-            }
-        }).catch(this.handleError)
-    }
-
-    register(user: User) {
-        return this.http.post(this.baseUrl + 'register', user, this.requestOptions()).catch(this.handleError);
-    }
-
-    loggedIn() {
-        return tokenNotExpired('token');
-    }
-
-    private requestOptions() {
-        const headers = new Headers({'Content-type': 'application/json'});
-        return new RequestOptions({headers: headers});
-    }
-
-    private handleError(error:any) {
-        const applicationError = error.headers.get('Application-Error');
-        if (applicationError)
-            return Observable.throw(applicationError);
-
-        const serverError = error.json();
-        let modelStateErrors = '';
-        if(serverError) {
-            for (const key in serverError) {
-                if (serverError.hasOwnProperty(key)) {
-                    modelStateErrors += serverError[key] + '\n';
-                }
-            }
+  login(model: any) {
+    return this.http.post<AuthUser>(this.baseUrl + 'auth/login', model,  {headers: new HttpHeaders()
+      .set('Content-Type', 'application/json')})
+      .map(user => {
+      if (user) {
+        localStorage.setItem('token', user.tokenString);
+        localStorage.setItem('user', JSON.stringify(user.user));
+        this.decodedToken = this.jwtHelperService.decodeToken(user.tokenString);
+        this.currentUser = user.user;
+        this.userToken = user.tokenString;
+        if (this.currentUser.photoUrl !== null) {
+          this.changeMemberPhoto(this.currentUser.photoUrl);
+        } else {
+          this.changeMemberPhoto('../../assets/user.png');
         }
-        return Observable.throw(
-            modelStateErrors || 'Server error'
-        );
-    }
+
+      }
+    });
+  }
+
+  register(user: User) {
+    return this.http
+      .post(`${this.baseUrl}auth/register`, user, {
+        headers: new HttpHeaders().set('Content-Type', 'application/json')
+      });
+  }
+
+  loggedIn() {
+    const token = this.jwtHelperService.tokenGetter();
+    if (!token) return false;
+
+    return !this.jwtHelperService.isTokenExpired(token);
+  }
 }
