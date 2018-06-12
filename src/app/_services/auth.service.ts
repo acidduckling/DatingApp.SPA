@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import { Observable } from 'rxjs/Observable';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { User } from '../_models/user';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthUser } from '../_models/authUser';
@@ -26,30 +23,32 @@ export class AuthService {
   }
 
   login(model: any) {
-    return this.http.post<AuthUser>(this.baseUrl + 'auth/login', model,  {headers: new HttpHeaders()
-      .set('Content-Type', 'application/json')})
-      .map(user => {
-      if (user) {
-        localStorage.setItem('token', user.tokenString);
-        localStorage.setItem('user', JSON.stringify(user.user));
-        this.decodedToken = this.jwtHelperService.decodeToken(user.tokenString);
-        this.currentUser = user.user;
-        this.userToken = user.tokenString;
-        if (this.currentUser.photoUrl !== null) {
-          this.changeMemberPhoto(this.currentUser.photoUrl);
-        } else {
-          this.changeMemberPhoto('../../assets/user.png');
-        }
-
-      }
-    });
+    return this.http
+      .post<AuthUser>(this.baseUrl + 'auth/login', model, {
+        headers: new HttpHeaders().set('Content-Type', 'application/json')
+      })
+      .pipe(
+        map(user => {
+          if (user) {
+            localStorage.setItem('token', user.tokenString);
+            localStorage.setItem('user', JSON.stringify(user.user));
+            this.decodedToken = this.jwtHelperService.decodeToken(user.tokenString);
+            this.currentUser = user.user;
+            this.userToken = user.tokenString;
+            if (this.currentUser.photoUrl !== null) {
+              this.changeMemberPhoto(this.currentUser.photoUrl);
+            } else {
+              this.changeMemberPhoto('../../assets/user.png');
+            }
+          }
+        })
+      );
   }
 
   register(user: User) {
-    return this.http
-      .post(`${this.baseUrl}auth/register`, user, {
-        headers: new HttpHeaders().set('Content-Type', 'application/json')
-      });
+    return this.http.post(`${this.baseUrl}auth/register`, user, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    });
   }
 
   loggedIn() {
