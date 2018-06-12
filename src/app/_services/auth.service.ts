@@ -8,7 +8,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthUser } from '../_models/authUser';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
