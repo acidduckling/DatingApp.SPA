@@ -5,7 +5,7 @@ import { UserService } from '../_services/user.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
-import _ = require('lodash');
+import * as _ from 'lodash';
 
 
 @Component({
@@ -16,7 +16,7 @@ import _ = require('lodash');
 export class MessagesComponent implements OnInit {
   messages: Message[];
   pagination: Pagination;
-  messageContainer: string = 'Unread';
+  messageContainer = 'Unread';
 
   constructor(private authService: AuthService,
     private alertify: AlertifyService,
@@ -32,9 +32,9 @@ export class MessagesComponent implements OnInit {
 
   loadMessages() {
     this.userService
-      .getMessages(this.authService.decodedToken.nameid, 
-        this.pagination.currentPage, 
-        this.pagination.itemsPerPage, 
+      .getMessages(this.authService.decodedToken.nameid,
+        this.pagination.currentPage,
+        this.pagination.itemsPerPage,
         this.messageContainer)
       .subscribe((res: PaginatedResult<Message[]>) => {
         this.messages = res.result;

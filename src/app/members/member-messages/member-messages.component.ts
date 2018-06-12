@@ -4,7 +4,7 @@ import { Message } from '../../_models/message';
 import { AlertifyService } from '../../_services/alertify.service';
 import { AuthService } from '../../_services/auth.service';
 import { UserService } from '../../_services/user.service';
-import _ = require('lodash');
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-member-messages',
@@ -27,12 +27,12 @@ export class MemberMessagesComponent implements OnInit {
   }
 
   loadMessages() {
-    const currentUserId : number = +this.authService.decodedToken.nameid;
+    const currentUserId: number = +this.authService.decodedToken.nameid;
     this.userService
       .getMessageThread(currentUserId, this.userId)
       .do((messages: Array<Message>) => {
         messages.forEach(message => {
-          if(!message.isRead && message.recipientId === currentUserId)
+          if (!message.isRead && message.recipientId === currentUserId)
             this.userService.markAsRead(currentUserId, message.id);
         });
       })
@@ -50,6 +50,6 @@ export class MemberMessagesComponent implements OnInit {
       this.newMessage.content = '';
     }, error => {
       this.alertify.error(error);
-    })
+    });
   }
 }

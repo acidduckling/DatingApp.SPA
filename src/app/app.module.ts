@@ -40,7 +40,7 @@ export function getAccessToken(): string {
 
 export const jwtConfig = {
   tokenGetter: getAccessToken,
-  whiteListedDomains: ['localhost:5000']
+  whitelistedDomains: [/localhost\:5000/]
 };
 
 @NgModule({
@@ -58,7 +58,7 @@ export const jwtConfig = {
     PhotoEditorComponent,
     TimeAgoPipe,
     MemberMessagesComponent
-],
+  ],
   imports: [
     BrowserModule,
     HttpModule,
@@ -92,4 +92,4 @@ export const jwtConfig = {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
