@@ -23,10 +23,10 @@ export class UserService {
             params = params.append('pageNumber', page)
                 .append('pageSize', itemsPerPage);
 
-        if(likesParam === 'Likers')
+        if (likesParam === 'Likers')
             params = params.append('Likers', 'true');
 
-        if(likesParam === 'Likees')
+        if (likesParam === 'Likees')
             params = params.append('Likees', 'true');
 
         if (userParams != null)
@@ -34,13 +34,13 @@ export class UserService {
                 .append('maxAge', userParams.maxAge)
                 .append('gender', userParams.gender)
                 .append('orderBy', userParams.orderBy);
-        
+
         return this.authHttp
             .get<User[]>(`${this.baseUrl}users`, { observe: 'response', params: params})
             .map(response => {
                 paginatedResult.result = response.body;
 
-                if(response.headers.get('Pagination') != null) {
+                if (response.headers.get('Pagination') != null) {
                     paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
                 }
 
@@ -73,7 +73,7 @@ export class UserService {
         let params = new HttpParams();
         params = params.append('MessageContainer', messageContainer);
 
-        if(page != null && itemsPerPage != null)
+        if (page != null && itemsPerPage != null)
             params = params.append('pageNumber', page)
                 .append('pageSize', itemsPerPage);
 
@@ -81,7 +81,7 @@ export class UserService {
             .map(response => {
                 paginatedResult.result = response.body;
 
-                if(response.headers.get('Pagination') != null)
+                if (response.headers.get('Pagination') != null)
                     paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
 
                 return paginatedResult;
